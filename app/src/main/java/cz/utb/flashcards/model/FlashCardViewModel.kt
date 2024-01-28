@@ -25,8 +25,8 @@ class FlashCardViewModel : ViewModel() {
     private var _flashCards: List<FlashcardModel> = emptyList()
     val items: List<FlashcardModel> get() = _flashCards
 
-    suspend fun fetchItems(): List<FlashcardModel> {
-        Log.d("FlashCardViewModel", "fetchItems: Fetching items from API")
+    suspend fun fetchItems(categoryName: String): List<FlashcardModel> {
+        Log.d("FlashCardViewModel", "fetchItems: Fetching items from API for category ${categoryName}")
         withContext(Dispatchers.IO) {
             val baseUrl = "https://example.com/"
             val retrofit = Retrofit.Builder()
@@ -35,7 +35,7 @@ class FlashCardViewModel : ViewModel() {
                 .build()
 
             val service = retrofit.create(FlashcardsAPIService::class.java)
-            val response = service.getSpreadsheetData().execute()
+            val response = service.getSpreadsheetData(categoryName).execute()
 
             if (response.isSuccessful) {
                 Log.d("FlashCardViewModel", "fetchItems: API request successful ${response.body()}")
